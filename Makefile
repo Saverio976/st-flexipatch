@@ -9,10 +9,10 @@ OBJ = $(SRC:.c=.o)
 
 all: st
 
-config.h:
+config.h: config.def.h
 	cp config.def.h config.h
 
-patches.h:
+patches.h: patches.def.h
 	cp patches.def.h patches.h
 
 .c.o:
