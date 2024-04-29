@@ -1,16 +1,18 @@
 /* See LICENSE file for copyright and license details. */
 
+#include "./patches.def.h"
+
 /*
  * appearance
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+static char *font = "CaskaydiaMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
 #if FONT2_PATCH
 /* Spare fonts */
 static char *font2[] = {
-/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
-/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
+    "FiraCode Nerd Font:pixelsize=16:antialias=true:autohint=true",
+    "Noto Mono:pixelsize=16:antialias=true:autohint=true"
 };
 #endif // FONT2_PATCH
 
