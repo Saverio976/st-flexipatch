@@ -7,12 +7,12 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "CaskaydiaMono Nerd Font:pixelsize=16:antialias=true:autohint=true";
+static char *font = "CaskaydiaMono Nerd Font:pixelsize=27:antialias=true:autohint=true";
 #if FONT2_PATCH
 /* Spare fonts */
 static char *font2[] = {
-    "FiraCode Nerd Font:pixelsize=16:antialias=true:autohint=true",
-    "Noto Mono:pixelsize=16:antialias=true:autohint=true"
+    "FiraCode Nerd Font:pixelsize=27:antialias=true:autohint=true",
+    "Noto Mono:pixelsize=27:antialias=true:autohint=true"
 };
 #endif // FONT2_PATCH
 
@@ -73,7 +73,7 @@ static float chscale = 1.0;
  *
  * More advanced example: L" `'\"()[]{}"
  */
-wchar_t *worddelimiters = L" ";
+wchar_t *worddelimiters = L" `'\"()[]{}";
 
 #if KEYBOARDSELECT_PATCH && REFLOW_PATCH
 /* Word delimiters for short and long jumps in the keyboard select patch */
@@ -113,7 +113,7 @@ static uint su_timeout = 200;
  * blinking timeout (set to 0 to disable blinking) for the terminal blinking
  * attribute.
  */
-static unsigned int blinktimeout = 800;
+static unsigned int blinktimeout = 0;
 
 /*
  * thickness of underline and bar cursors
@@ -132,11 +132,11 @@ int hidecursor = 1;
  *    Bold affects lines thickness if boxdraw_bold is not 0. Italic is ignored.
  * 0: disable (render all U25XX glyphs normally from the font).
  */
-const int boxdraw = 0;
-const int boxdraw_bold = 0;
+const int boxdraw = 1;
+const int boxdraw_bold = 1;
 
 /* braille (U28XX):  1: render as adjacent "pixels",  0: use font */
-const int boxdraw_braille = 0;
+const int boxdraw_braille = 1;
 #endif // BOXDRAW_PATCH
 
 /*
@@ -163,7 +163,7 @@ char *termname = "st-256color";
  *
  *	stty tabs
  */
-unsigned int tabspaces = 8;
+unsigned int tabspaces = 4;
 
 #if ALPHA_PATCH
 /* bg opacity */
@@ -774,5 +774,5 @@ static char *plumb_cmd = "plumb";
 #define UNDERCURL_SPIKY 1
 #define UNDERCURL_CAPPED 2
 // Active style
-#define UNDERCURL_STYLE UNDERCURL_SPIKY
+#define UNDERCURL_STYLE UNDERCURL_CURLY
 #endif // UNDERCURL_PATCH
