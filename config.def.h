@@ -180,32 +180,35 @@ float alphaUnfocused = 0.6;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	[0] = "#123e7c",
-	[1] = "#ff0000",
-	[2] = "#d300c4",
-	[3] = "#f57800",
-	[4] = "#123e7c",
-	[5] = "#711c91",
-	[6] = "#0abdc6",
-	[7] = "#d7d7d5",
+          /* moonfly */   /* cyberpunk neon */
+	[0] = "#323437",      /* "#123e7c", */
+	[1] = "#ff5454",      /* "#ff0000", */
+	[2] = "#8cc85f",      /* "#d300c4", */
+	[3] = "#e3c78a",      /* "#f57800", */
+	[4] = "#80a0ff",      /* "#123e7c", */
+	[5] = "#d183e8",      /* "#711c91", */
+	[6] = "#79dac8",      /* "#0abdc6", */
+	[7] = "#a1aab8",      /* "#d7d7d5", */
 
 	/* 8 bright colors */
-	[8] = "#1c61c2",
-	[9] = "#ff0000",
-	[10] = "#d300c4",
-	[11] = "#f57800",
-	[12] = "#00ff00",
-	[13] = "#711c91",
-	[14] = "#0abdc6",
-	[15] = "#d7d7d5",
+          /* moonfly */   /* cyberpunk neon */
+	[8] =  "#7c8f8f",     /* "#1c61c2", */
+	[9] =  "#ff5189",     /* "#ff0000", */
+	[10] = "#36c692",     /* "#d300c4", */
+	[11] = "#bfbf97",     /* "#f57800", */
+	[12] = "#74b2ff",     /* "#00ff00", */
+	[13] = "#ae81ff",     /* "#711c91", */
+	[14] = "#85dc85",     /* "#0abdc6", */
+	[15] = "#e2637f",     /* "#d7d7d5", */
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	[256] = "#ffffff", /* 256 -> cursor */
-	[257] = "#555555", /* 257 -> rev cursor*/
-	[258] = "#000b1e", /* 258 -> bg */
-	[259] = "#0abdc6", /* 259 -> fg */
+          /* moonfly */   /* cyberpunk neon */
+	[256] = "#eeeee4",    /* "#ffffff", */
+	[257] = "#080808",    /* "#555555", */
+	[258] = "#080808",    /* "#000b1e", */
+	[259] = "#eeeeee",    /* "#0abdc6", */
 };
 
 
@@ -217,11 +220,11 @@ static const char *colorname[] = {
 unsigned int defaultbg = 0;
 unsigned int bg = 17, bgUnfocused = 16;
 #else
-unsigned int defaultbg = 258;
+unsigned int defaultbg = 258; // bg
 #endif // ALPHA_FOCUS_HIGHLIGHT_PATCH
-unsigned int defaultfg = 259;
-unsigned int defaultcs = 256;
-unsigned int defaultrcs = 257;
+unsigned int defaultfg = 259; // fg
+unsigned int defaultcs = 256; // cursor
+unsigned int defaultrcs = 257; // rev cursor
 #if SELECTION_COLORS_PATCH
 unsigned int selectionfg = 258;
 unsigned int selectionbg = 259;
