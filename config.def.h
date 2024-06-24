@@ -7,12 +7,12 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "CaskaydiaMono Nerd Font:pixelsize=20:antialias=true:autohint=true";
+static char *font = "CaskaydiaMono Nerd Font:pixelsize=25:antialias=true:autohint=true";
 #if FONT2_PATCH
 /* Spare fonts */
 static char *font2[] = {
-    "FiraCode Nerd Font:pixelsize=20:antialias=true:autohint=true",
-    "Noto Mono:pixelsize=20:antialias=true:autohint=true"
+    "FiraCode Nerd Font:pixelsize=25:antialias=true:autohint=true",
+    "Noto Mono:pixelsize=25:antialias=true:autohint=true"
 };
 #endif // FONT2_PATCH
 
