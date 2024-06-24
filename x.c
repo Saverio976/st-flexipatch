@@ -42,6 +42,13 @@ enum undercurl_slope_type {
 };
 #endif // UNDERCURL_PATCH
 
+#if ANYGEOMETRY_PATCH
+typedef enum {
+	PixelGeometry,
+	CellGeometry
+} Geometry;
+#endif // ANYGEOMETRY_PATCH
+
 /* X modifiers */
 #define XK_ANY_MOD    UINT_MAX
 #define XK_NO_MOD     0
@@ -311,6 +318,7 @@ void
 zoomabs(const Arg *arg)
 {
 	#if SIXEL_PATCH
+	int i;
 	ImageList *im;
 	#endif // SIXEL_PATCH
 
@@ -321,14 +329,16 @@ zoomabs(const Arg *arg)
 	#endif // FONT2_PATCH
 
 	#if SIXEL_PATCH
-	/* deleting old pixmaps forces the new scaled pixmaps to be created */
-	for (im = term.images; im; im = im->next) {
-		if (im->pixmap)
-			XFreePixmap(xw.dpy, (Drawable)im->pixmap);
-		if (im->clipmask)
-			XFreePixmap(xw.dpy, (Drawable)im->clipmask);
-		im->pixmap = NULL;
-		im->clipmask = NULL;
+	/* delete old pixmaps so that xfinishdraw() can create new scaled ones */
+	for (im = term.images, i = 0; i < 2; i++, im = term.images_alt) {
+		for (; im; im = im->next) {
+			if (im->pixmap)
+				XFreePixmap(xw.dpy, (Drawable)im->pixmap);
+			if (im->clipmask)
+				XFreePixmap(xw.dpy, (Drawable)im->clipmask);
+			im->pixmap = NULL;
+			im->clipmask = NULL;
+		}
 	}
 	#endif // SIXEL_PATCH
 
@@ -1468,13 +1478,31 @@ xinit(int cols, int rows)
 	xloadcols();
 
 	/* adjust fixed window geometry */
-	#if ANYSIZE_PATCH
+	#if ANYGEOMETRY_PATCH
+	switch (geometry) {
+	case CellGeometry:
+		#if ANYSIZE_PATCH
+		win.w = 2 * win.hborderpx + cols * win.cw;
+		win.h = 2 * win.vborderpx + rows * win.ch;
+		#else
+		win.w = 2 * borderpx + cols * win.cw;
+		win.h = 2 * borderpx + rows * win.ch;
+		#endif // ANYGEOMETRY_PATCH | ANYSIZE_PATCH
+		break;
+	case PixelGeometry:
+		win.w = cols;
+		win.h = rows;
+		cols = (win.w - 2 * borderpx) / win.cw;
+		rows = (win.h - 2 * borderpx) / win.ch;
+		break;
+	}
+	#elif ANYSIZE_PATCH
 	win.w = 2 * win.hborderpx + cols * win.cw;
 	win.h = 2 * win.vborderpx + rows * win.ch;
 	#else
 	win.w = 2 * borderpx + cols * win.cw;
 	win.h = 2 * borderpx + rows * win.ch;
-	#endif // ANYSIZE_PATCH
+	#endif // ANYGEOMETRY_PATCH | ANYSIZE_PATCH
 	if (xw.gm & XNegative)
 		xw.l += DisplayWidth(xw.dpy, xw.scr) - win.w - 2;
 	if (xw.gm & YNegative)
@@ -3153,6 +3181,12 @@ xfinishdraw(void)
 		if (im->x >= term.col || im->y >= term.row || im->y < 0)
 			continue;
 
+		#if KEYBOARDSELECT_PATCH && REFLOW_PATCH
+		/* do not draw the image on the search bar */
+		if (im->y == term.row-1 && IS_SET(MODE_KBDSELECT) && kbds_issearchmode())
+			continue;
+		#endif // KEYBOARDSELECT_PATCH
+
 		/* scale the image */
 		width = MAX(im->width * win.cw / im->cw, 1);
 		height = MAX(im->height * win.ch / im->ch, 1);
@@ -3863,7 +3897,17 @@ main(int argc, char *argv[])
 	case 'g':
 		xw.gm = XParseGeometry(EARGF(usage()),
 				&xw.l, &xw.t, &cols, &rows);
+		#if ANYGEOMETRY_PATCH
+		geometry = CellGeometry;
+		#endif // ANYGEOMETRY_PATCH
 		break;
+	#if ANYGEOMETRY_PATCH
+	case 'G':
+		xw.gm = XParseGeometry(EARGF(usage()),
+		        &xw.l, &xw.t, &width, &height);
+		geometry = PixelGeometry;
+		break;
+	#endif // ANYGEOMETRY_PATCH
 	case 'i':
 		xw.isfixed = 1;
 		break;
@@ -3912,13 +3956,28 @@ run:
 	hbcreatebuffer();
 	#endif // LIGATURES_PATCH
 
+	#if ANYGEOMETRY_PATCH
+	switch (geometry) {
+	case CellGeometry:
+		xinit(cols, rows);
+		break;
+	case PixelGeometry:
+		xinit(width, height);
+		cols = (win.w - 2 * borderpx) / win.cw;
+		rows = (win.h - 2 * borderpx) / win.ch;
+		break;
+	}
+	#endif // ANYGEOMETRY_PATCH
+
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
 	#if ALPHA_PATCH && ALPHA_FOCUS_HIGHLIGHT_PATCH
 	defaultbg = MAX(LEN(colorname), 256);
 	#endif // ALPHA_FOCUS_HIGHLIGHT_PATCH
 	tnew(cols, rows);
+	#if !ANYGEOMETRY_PATCH
 	xinit(cols, rows);
+	#endif // ANYGEOMETRY_PATCH
 	#if BACKGROUND_IMAGE_PATCH
 	bginit();
 	#endif // BACKGROUND_IMAGE_PATCH
