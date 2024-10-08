@@ -385,8 +385,8 @@ static MouseShortcut mshortcuts[] = {
 	#if SCROLLBACK_MOUSE_ALTSCREEN_PATCH || REFLOW_PATCH
 	{ XK_NO_MOD,            Button4, kscrollup,      {.i = 5},      0, S_PRI },
 	{ XK_NO_MOD,            Button5, kscrolldown,    {.i = 5},      0, S_PRI },
-	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"}, 0, S_ALT },
-	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"}, 0, S_ALT },
+	{ XK_NO_MOD,            Button4, ttysend,        {.s = "\031"}, 0, S_ALT },
+	{ XK_NO_MOD,            Button5, ttysend,        {.s = "\005"}, 0, S_ALT },
 	#else
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
