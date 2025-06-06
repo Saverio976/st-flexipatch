@@ -2234,20 +2234,9 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	else
 	#endif // BACKGROUND_IMAGE_PATCH
 
-	#if !WIDE_GLYPHS_PATCH
-	XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
-	#endif // WIDE_GLYPHS_PATCH
-
-	/* Set the clip region because Xft is sometimes dirty. */
-	r.x = 0;
-	r.y = 0;
-	r.height = win.ch;
-	r.width = width;
-	XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
-
-	#if WIDE_GLYPHS_PATCH
 	/* Fill the background */
 	XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
+	#if WIDE_GLYPHS_PATCH
 	}
 	#endif // WIDE_GLYPHS_PATCH
 
@@ -2258,13 +2247,27 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
 	if (base.mode & ATTR_BOXDRAW) {
 		drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
 	} else {
-		/* Render the glyphs. */
-		XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
-	}
+	#endif // BOXDRAW_PATCH
+	/* Set the clip region because Xft is sometimes dirty. */
+	#if WIDE_GLYPHS_PATCH
+	r.x = 0;
+	r.y = 0;
+	r.height = win.ch;
+	r.width = win.w;
+	XftDrawSetClipRectangles(xw.draw, 0, winy, &r, 1);
 	#else
+	r.x = 0;
+	r.y = 0;
+	r.height = win.ch;
+	r.width = width;
+	XftDrawSetClipRectangles(xw.draw, winx, winy, &r, 1);
+	#endif // WIDE_GLYPHS_PATCH
+	#if BOXDRAW_PATCH
+	}
+	#endif // BOXDRAW_PATCH
+
 	/* Render the glyphs. */
 	XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
-	#endif // BOXDRAW_PATCH
 
 	/* Render underline and strikethrough. */
 	if (base.mode & ATTR_UNDERLINE) {
@@ -3804,8 +3807,12 @@ run(void)
 
 		xev = 0;
 		while (XPending(xw.dpy)) {
-			xev = 1;
 			XNextEvent(xw.dpy, &ev);
+			#if BLINKING_CURSOR_PATCH
+			xev = (!xev || xev == SelectionRequest) ? ev.type : xev;
+			#else
+			xev = 1;
+			#endif // BLINKING_CURSOR_PATCH
 			if (XFilterEvent(&ev, None))
 				continue;
 			if (handler[ev.type])
@@ -3832,10 +3839,10 @@ run(void)
 			if (!drawing) {
 				trigger = now;
 				#if BLINKING_CURSOR_PATCH
-				if (IS_SET(MODE_BLINK)) {
-					win.mode ^= MODE_BLINK;
+				if (xev != SelectionRequest) {
+					win.mode &= ~MODE_BLINK;
+					lastblink = now;
 				}
-				lastblink = now;
 				#endif // BLINKING_CURSOR_PATCH
 				drawing = 1;
 			}
