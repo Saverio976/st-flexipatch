@@ -189,26 +189,26 @@ char *xdndescchar = " !\"#$&'()*;<>?[\\]^`{|}~";
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-          /* moonfly */   /* cyberpunk neon */
-	[0] = "#323437",      /* "#123e7c", */
-	[1] = "#ff5454",      /* "#ff0000", */
-	[2] = "#8cc85f",      /* "#d300c4", */
-	[3] = "#e3c78a",      /* "#f57800", */
-	[4] = "#80a0ff",      /* "#123e7c", */
-	[5] = "#d183e8",      /* "#711c91", */
-	[6] = "#79dac8",      /* "#0abdc6", */
-	[7] = "#a1aab8",      /* "#d7d7d5", */
+     /* gruvbox light */   /* moonfly */     /* cyberpunk neon */
+	[0] = "#fbf1c7",      /* "#323437", */     /* "#123e7c", */
+	[1] = "#cc241d",      /* "#ff5454", */     /* "#ff0000", */
+	[2] = "#98971a",      /* "#8cc85f", */     /* "#d300c4", */
+	[3] = "#d79921",      /* "#e3c78a", */     /* "#f57800", */
+	[4] = "#458588",      /* "#80a0ff", */     /* "#123e7c", */
+	[5] = "#b16286",      /* "#d183e8", */     /* "#711c91", */
+	[6] = "#689d6a",      /* "#79dac8", */     /* "#0abdc6", */
+	[7] = "#7c6f64",      /* "#a1aab8", */     /* "#d7d7d5", */
 
 	/* 8 bright colors */
-          /* moonfly */   /* cyberpunk neon */
-	[8] =  "#7c8f8f",     /* "#1c61c2", */
-	[9] =  "#ff5189",     /* "#ff0000", */
-	[10] = "#36c692",     /* "#d300c4", */
-	[11] = "#bfbf97",     /* "#f57800", */
-	[12] = "#74b2ff",     /* "#00ff00", */
-	[13] = "#ae81ff",     /* "#711c91", */
-	[14] = "#85dc85",     /* "#0abdc6", */
-	[15] = "#e2637f",     /* "#d7d7d5", */
+     /* gruvbox light */   /* moonfly */     /* cyberpunk neon */
+	[8] =  "#928374",     /* "#7c8f8f", */     /* "#1c61c2", */
+	[9] =  "#9d0006",     /* "#ff5189", */     /* "#ff0000", */
+	[10] = "#79740e",     /* "#36c692", */     /* "#d300c4", */
+	[11] = "#b57614",     /* "#bfbf97", */     /* "#f57800", */
+	[12] = "#076678",     /* "#74b2ff", */     /* "#00ff00", */
+	[13] = "#8f3f71",     /* "#ae81ff", */     /* "#711c91", */
+	[14] = "#427b58",     /* "#85dc85", */     /* "#0abdc6", */
+	[15] = "#3c3836",     /* "#e2637f", */     /* "#d7d7d5", */
 
 	[255] = 0,
 
@@ -229,11 +229,11 @@ static const char *colorname[] = {
 unsigned int defaultbg = 0;
 unsigned int bg = 17, bgUnfocused = 16;
 #else
-unsigned int defaultbg = 258; // bg
+unsigned int defaultbg = 0; // bg
 #endif // ALPHA_FOCUS_HIGHLIGHT_PATCH
-unsigned int defaultfg = 259; // fg
-unsigned int defaultcs = 256; // cursor
-unsigned int defaultrcs = 257; // rev cursor
+unsigned int defaultfg = 15; // fg
+unsigned int defaultcs = 15; // cursor
+unsigned int defaultrcs = 15; // rev cursor
 #if SELECTION_COLORS_PATCH
 unsigned int selectionfg = 258;
 unsigned int selectionbg = 259;
